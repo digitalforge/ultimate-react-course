@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import Logo from './components/Logo'
+import Form from './components/Form'
+import PackingList from './components/PackingList'
+import Stats from './components/Stats'
+
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [items, setItems] = useState([])
+
+  function handleAddItems(item) {
+    setItems(items => [...items, item])
+  }
+
+  function handleDeleteItem(id) {
+    setItems(items => items.filter(item => item.id !== id))
+  }
+
+  function handleCheckedItems(id) {
+    setItems(items =>
+      items.map(item =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    )
+  }
+
+  function handleClearList() {
+    if (!items.length) return
+
+    const confirmed = window.confirm(
+      'Are you sure you want to delete all items?'
+    )
+
+    confirmed ? setItems([]) : setItems(items)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='app'>
+      <Logo />
+      <Form onAddItems={handleAddItems} />
+      <PackingList
+        items={items}
+        onDeleteItem={handleDeleteItem}
+        onCheckItem={handleCheckedItems}
+        onClearList={handleClearList}
+      />
+      <Stats items={items} />
+    </div>
   )
 }
 
