@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import StarRating from './StarRating'
 import Loader from './Loader'
 
+import placholderPoster from '../assets/poster.jpg'
+
 export default function MovieDetails({
   selectedId,
   onCloseMovie,
@@ -79,7 +81,11 @@ export default function MovieDetails({
             <button className='btn-back' onClick={onCloseMovie}>
               &larr;
             </button>
-            <img src={movie.Poster} alt={`Poster of ${movie.Title}`} />
+            <img
+              src={movie.Poster !== 'N/A' ? movie.Poster : placholderPoster}
+              alt={`Poster of ${movie.Title}`}
+              onError={e => (e.target.src = placholderPoster)}
+            />
             <div className='details-overview'>
               <h2>{movie.Title}</h2>
               <p>

@@ -71,8 +71,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null)
   const debouncedQuery = useDebounce(query, 600)
   useEffect(() => {
-    const controller = new AbortController()
-
+    if (debouncedQuery.length <= 0) return
     async function fetchMovies() {
       try {
         setLoading(true)
