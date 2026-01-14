@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Logo from './components/Logo'
 import Resultscount from './components/Resultscount'
@@ -6,8 +6,11 @@ import Searchbar from './components/Searchbar'
 import Main from './components/Main'
 import Box from './components/Box'
 import Listbox from './components/Listbox'
+import MovieDetails from './components/MovieDetails'
 import Watchedsummary from './components/Watchedsummary'
 import Watchedbox from './components/Watchedbox'
+import Loader from './components/Loader'
+import ErrorMessage from './components/ErrorMessage'
 
 const tempMovieData = [
   {
@@ -56,10 +59,68 @@ const tempWatchedData = [
   },
 ]
 
+const KEY = import.meta.env.VITE_API_KEY
+
 export default function App() {
   const [query, setQuery] = useState('')
-  const [movies, setMovies] = useState(tempMovieData)
-  const [watched, setWatched] = useState(tempWatchedData)
+  const [movies, setMovies] = useState([])
+  const [watched, setWatched] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [selectedId, setSelectedId] = useState(null)
+
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        setLoading(true)
+        setError('')
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+        )
+        //if error connecting
+        if (!res.ok) throw new Error('Something went wrong....')
+
+        const data = await res.json()
+        //if error with data
+        if (data.Response === 'False') throw new Error('Movie not found')
+
+        setMovies(data.Search)
+        setLoading(false)
+      } catch (err) {
+        setLoading(false)
+        setError(err.message)
+      }
+    }
+
+    if (query.length < 3) {
+      setMovies([])
+      setError('')
+      return
+    }
+
+    fetchMovies()
+  }, [query])
+
+  function handleSetSeletedId(id) {
+    setSelectedId(selectedId => (id === selectedId ? null : id))
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null)
+  }
+
+  function handleAddWatchedMovie(movie) {
+    if (watched.some(watchedMovie => watchedMovie.imdbID === movie.imdbID)) {
+      alert('Movie already on your list')
+      return
+    }
+
+    setWatched(watched => [...watched, movie])
+  }
+
+  function handleDeleteWatched(id) {
+    setWatched(watched => watched.filter(movie => movie.imdbID !== id))
+  }
 
   return (
     <>
@@ -70,11 +131,31 @@ export default function App() {
       </Navbar>
       <Main>
         <Box>
-          <Listbox movies={movies} />
+          {loading && <Loader />}
+          {!loading && !error && (
+            <Listbox movies={movies} onSelected={handleSetSeletedId} />
+          )}
+          {error && <ErrorMessage message={error} />}
         </Box>
+
         <Box>
-          <Watchedsummary watched={watched} />
-          <Watchedbox watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+              KEY={KEY}
+              onAddWatched={handleAddWatchedMovie}
+              watched={watched}
+            />
+          ) : (
+            <>
+              <Watchedsummary watched={watched} />
+              <Watchedbox
+                watched={watched}
+                onDeleteWatched={handleDeleteWatched}
+              />
+            </>
+          )}
         </Box>
       </Main>
     </>
