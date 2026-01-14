@@ -11,6 +11,7 @@ import Watchedsummary from './components/Watchedsummary'
 import Watchedbox from './components/Watchedbox'
 import Loader from './components/Loader'
 import ErrorMessage from './components/ErrorMessage'
+import { useDebounce } from './hooks/useDebounce'
 
 const tempMovieData = [
   {
@@ -68,14 +69,16 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [selectedId, setSelectedId] = useState(null)
-
+  const debouncedQuery = useDebounce(query, 600)
   useEffect(() => {
+    const controller = new AbortController()
+
     async function fetchMovies() {
       try {
         setLoading(true)
         setError('')
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${debouncedQuery}`
         )
         //if error connecting
         if (!res.ok) throw new Error('Something went wrong....')
@@ -99,7 +102,7 @@ export default function App() {
     }
 
     fetchMovies()
-  }, [query])
+  }, [debouncedQuery])
 
   function handleSetSeletedId(id) {
     setSelectedId(selectedId => (id === selectedId ? null : id))
