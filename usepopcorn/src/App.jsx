@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Logo from './components/Logo'
-import Resultscount from './components/Resultscount'
+
 import Searchbar from './components/Searchbar'
 import Main from './components/Main'
 import Box from './components/Box'
@@ -128,7 +128,7 @@ export default function App() {
     <>
       <Navbar>
         <Logo />
-        <Resultscount movies={movies} />
+        {/* <Resultscount movies={movies} /> */}
         <Searchbar query={query} setQuery={setQuery} />
       </Navbar>
       <Main>
