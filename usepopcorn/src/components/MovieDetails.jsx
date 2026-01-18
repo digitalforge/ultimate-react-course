@@ -16,13 +16,9 @@ export default function MovieDetails({
   const [userRating, setUserRating] = useState(0)
 
   const isWatched = watched.map(watched => watched.imdbID).includes(selectedId)
-  console.log(isWatched)
-
   const watchedUserRating = watched.find(
     movie => movie.imdbID === selectedId
   )?.userRating
-
-  console.log(selectedId)
 
   function handleSetRating(rating) {
     setUserRating(rating)
@@ -44,6 +40,18 @@ export default function MovieDetails({
   }
 
   useEffect(() => {
+    function callBack(e) {
+      if (e.code === 'Escape') {
+        onCloseMovie()
+        console.log('CLOSED')
+      }
+    }
+    document.addEventListener('keydown', callBack)
+
+    return () => document.removeEventListener('keydown', callBack)
+  }, [onCloseMovie])
+
+  useEffect(() => {
     async function fetchMovie() {
       try {
         setLoading(true)
@@ -60,6 +68,10 @@ export default function MovieDetails({
     }
 
     fetchMovie()
+
+    return () => {
+      console.log('Clean up function called')
+    }
   }, [selectedId])
 
   useEffect(() => {

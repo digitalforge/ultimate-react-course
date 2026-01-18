@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import Logo from './components/Logo'
-
 import Searchbar from './components/Searchbar'
 import Main from './components/Main'
 import Box from './components/Box'
@@ -70,6 +69,28 @@ export default function App() {
   const [error, setError] = useState('')
   const [selectedId, setSelectedId] = useState(null)
   const debouncedQuery = useDebounce(query, 600)
+
+  function handleSetSeletedId(id) {
+    setSelectedId(selectedId => (id === selectedId ? null : id))
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null)
+  }
+
+  function handleAddWatchedMovie(movie) {
+    if (watched.some(watchedMovie => watchedMovie.imdbID === movie.imdbID)) {
+      alert('Movie already on your list')
+      return
+    }
+
+    setWatched(watched => [...watched, movie])
+  }
+
+  function handleDeleteWatched(id) {
+    setWatched(watched => watched.filter(movie => movie.imdbID !== id))
+  }
+
   useEffect(() => {
     if (debouncedQuery.length <= 0) return
     async function fetchMovies() {
@@ -100,29 +121,9 @@ export default function App() {
       return
     }
 
+    handleCloseMovie()
     fetchMovies()
   }, [debouncedQuery])
-
-  function handleSetSeletedId(id) {
-    setSelectedId(selectedId => (id === selectedId ? null : id))
-  }
-
-  function handleCloseMovie() {
-    setSelectedId(null)
-  }
-
-  function handleAddWatchedMovie(movie) {
-    if (watched.some(watchedMovie => watchedMovie.imdbID === movie.imdbID)) {
-      alert('Movie already on your list')
-      return
-    }
-
-    setWatched(watched => [...watched, movie])
-  }
-
-  function handleDeleteWatched(id) {
-    setWatched(watched => watched.filter(movie => movie.imdbID !== id))
-  }
 
   return (
     <>
