@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import StarRating from './StarRating'
 import Loader from './Loader'
+import { useKey } from '../hooks/useKey'
 
 import placholderPoster from '../assets/poster.jpg'
+
+const KEY = import.meta.env.VITE_API_KEY
 
 export default function MovieDetails({
   selectedId,
   onCloseMovie,
-  KEY,
   onAddWatched,
   watched,
 }) {
@@ -15,9 +17,16 @@ export default function MovieDetails({
   const [loading, setLoading] = useState(false)
   const [userRating, setUserRating] = useState(0)
 
+  //REFS
+  const countRef = useRef(0)
+
+  useEffect(() => {
+    if (userRating) countRef.current = countRef.current + 1
+  }, [userRating])
+
   const isWatched = watched.map(watched => watched.imdbID).includes(selectedId)
   const watchedUserRating = watched.find(
-    movie => movie.imdbID === selectedId
+    movie => movie.imdbID === selectedId,
   )?.userRating
 
   function handleSetRating(rating) {
@@ -33,30 +42,33 @@ export default function MovieDetails({
       imdbRating: Number(movie.imdbRating),
       Runtime: Number(movie.Runtime.split(' ').at(0)),
       userRating,
+      countRating: countRef.current,
     }
 
     onAddWatched(newWatchedMovie)
     onCloseMovie()
   }
 
-  useEffect(() => {
-    function callBack(e) {
-      if (e.code === 'Escape') {
-        onCloseMovie()
-        console.log('CLOSED')
-      }
-    }
-    document.addEventListener('keydown', callBack)
+  useKey('Escape', onCloseMovie)
 
-    return () => document.removeEventListener('keydown', callBack)
-  }, [onCloseMovie])
+  // useEffect(() => {
+  //   function callBack(e) {
+  //     if (e.code === 'Escape') {
+  //       onCloseMovie()
+  //       console.log('CLOSED')
+  //     }
+  //   }
+  //   document.addEventListener('keydown', callBack)
+
+  //   return () => document.removeEventListener('keydown', callBack)
+  // }, [onCloseMovie])
 
   useEffect(() => {
     async function fetchMovie() {
       try {
         setLoading(true)
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
         )
         const data = await res.json()
         setMovie(data)
@@ -70,7 +82,8 @@ export default function MovieDetails({
     fetchMovie()
 
     return () => {
-      console.log('Clean up function called')
+      //this is a cleanup function.
+      //console.log('Clean up function called')
     }
   }, [selectedId])
 
@@ -133,10 +146,20 @@ export default function MovieDetails({
                 </p>
               )}
             </div>
-            <div>
-              <em>{movie.Plot}</em>
-              <p>Starring {movie.Actors}</p>
-              <p>Directed by {movie.Director}</p>
+            <div className='details-description'>
+              <p>
+                <b>Plot: </b>
+                <em>{movie.Plot}</em>
+              </p>
+              <br />
+              <br />
+              <p>
+                <b>Starring:</b> {movie.Actors}
+              </p>
+              <br />
+              <p>
+                <b>Directed by: </b> {movie.Director}
+              </p>
             </div>
           </section>
         </>

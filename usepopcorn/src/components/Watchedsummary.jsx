@@ -1,6 +1,8 @@
 import { BiSolidStar } from 'react-icons/bi'
-import { BiBarChart } from 'react-icons/bi'
+
 import { BiTime } from 'react-icons/bi'
+import { BiCameraMovie } from 'react-icons/bi'
+import { BiCalendarStar } from 'react-icons/bi'
 const average = arr =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0)
 
@@ -14,12 +16,14 @@ export default function Watchedsummary({ watched }) {
       <h2>Movies you watched</h2>
       <div>
         <p>
-          <span>#️⃣</span>
+          <span>
+            <BiCameraMovie />
+          </span>
           <span>{watched?.length} movies</span>
         </p>
         <p>
           <span>
-            <BiSolidStar />
+            <BiSolidStar className='icon-yellow' />
           </span>
           <span>
             {avgImdbRating > 0 ? avgImdbRating.toFixed(1) : avgImdbRating}
@@ -27,7 +31,7 @@ export default function Watchedsummary({ watched }) {
         </p>
         <p>
           <span>
-            <BiBarChart />
+            <BiCalendarStar className='icon-yellow' />
           </span>
           <span>{avgUserRating.toFixed(1)}</span>
         </p>
