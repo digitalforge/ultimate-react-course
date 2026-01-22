@@ -1,34 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useReducer } from 'react'
+import Header from './components/Header'
+import Main from './components/Main'
+import Loader from './components/Loader'
+import Error from './components/Error'
+import StartScreen from './components/StartScreen'
+import Question from './components/Question'
+
+const initialState = {
+  questions: [],
+  //possible status: 'loading','error','ready','active','finished'
+  status: 'loading',
+  currentQuestion: 0,
+  answer: null,
+  points: 0,
+}
+
+function reducer(state, dispatchAction) {
+  switch (dispatchAction.type) {
+    case 'dataRecieved':
+      return { ...state, questions: dispatchAction.payload, status: 'ready' }
+    case 'dataFailed':
+      return { ...state, status: 'error' }
+    case 'start':
+      return { ...state, status: 'active' }
+    case 'newAnswer':
+      const question = state.questions.at(state.index)
+      return {
+        ...state,
+        answer: dispatchAction.payload,
+        points:
+          dispatchAction.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      }
+    default:
+      throw new Error('Action Unknown')
+  }
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [{ status, questions, currentQuestion, answer }, dispatch] = useReducer(
+    reducer,
+    initialState,
+  )
+
+  const questionsCount = questions.length
+  console.log(questionsCount)
+
+  useEffect(() => {
+    async function fetchQuestions() {
+      try {
+        const res = await fetch('http://localhost:8000/questions')
+        const data = await res.json()
+        dispatch({ type: 'dataRecieved', payload: data })
+      } catch (err) {
+        dispatch({ type: 'dataFailed' })
+      }
+    }
+
+    fetchQuestions()
+  }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='app'>
+      <Header />
+      <Main>
+        {status === 'loading' && <Loader />}
+        {status === 'error' && <Error />}
+        {status === 'ready' && (
+          <StartScreen questionsCount={questionsCount} dispatch={dispatch} />
+        )}
+        {status === 'active' && (
+          <Question
+            question={questions[currentQuestion]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+        )}
+      </Main>
+    </div>
   )
 }
 
