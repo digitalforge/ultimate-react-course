@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Codystar:wght@300;400&display=swap');
+
 :root {
   --color-darkest: #343a40;
   --color-dark: #495057;
@@ -6,8 +8,6 @@
   --color-theme: #1098ad;
   --color-accent: #ffa94d;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Codystar:wght@300;400&display=swap');
 
 .codystar-light {
   font-family: 'Codystar', sans-serif;
@@ -126,6 +126,7 @@ progress {
 ::-webkit-progress-value {
   background-color: var(--color-theme);
   border-radius: 100px;
+  transition: width 0.3s ease;
 }
 
 .btn {
@@ -180,6 +181,43 @@ progress {
   color: var(--color-darkest);
 }
 
+.btn-group {
+  display: flex;
+  gap: 10px;
+  color: black;
+}
+.easy-btn {
+  background: #2ed8a7;
+}
+
+.medium-btn {
+  background: #f4b740;
+}
+
+.hard-btn {
+  background: #61dafb;
+}
+
+.very-hard-btn {
+  background: #ff4d4d;
+}
+
+.easy-btn:hover {
+  background: #1baf87 !important;
+}
+
+.medium-btn:hover {
+  background: #e19812 !important;
+}
+
+.hard-btn:hover {
+  background: #34adcf !important;
+}
+
+.vary-hard-btn:hover {
+  background: #ff2f2f !important;
+}
+
 .answer {
   transform: translateX(2rem);
 }
@@ -198,6 +236,12 @@ progress {
 .result span {
   font-size: 2.2rem;
   margin-right: 4px;
+}
+
+.result .message {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .highscore {
