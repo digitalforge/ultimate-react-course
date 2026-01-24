@@ -14,6 +14,7 @@ import Footer from './components/Footer'
 const SECONDS_PER_QUESTION = 30
 
 const initialState = {
+  allQuestions: [],
   questions: [],
   status: 'loading',
   currentQuestion: 0,
@@ -22,7 +23,6 @@ const initialState = {
   highScore: 0,
   secondsRemaining: null,
   difficulty: null,
-  allQuestions: [],
 }
 
 function reducer(state, dispatchAction) {
@@ -88,6 +88,7 @@ function reducer(state, dispatchAction) {
     case 'restart':
       return {
         ...initialState,
+        allQuestions: state.allQuestions,
         questions: state.allQuestions,
         status: 'ready',
         highScore: state.highScore,

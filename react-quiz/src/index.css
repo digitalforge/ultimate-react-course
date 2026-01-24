@@ -181,6 +181,21 @@ progress {
   color: var(--color-darkest);
 }
 
+.easy {
+  color: #2ed8a7;
+}
+
+.medium {
+  color: #f4b740;
+}
+
+.hard {
+  color: #61dafb;
+}
+.all {
+  color: #ff4d4d;
+}
+
 .btn-group {
   display: flex;
   gap: 10px;
