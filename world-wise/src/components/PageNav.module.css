@@ -1,0 +1,23 @@
+.nav {
+  background: #3a4f7a;
+  padding: 2em;
+}
+.nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  list-style-type: none;
+}
+
+.nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav :global(.active) {
+  color: #f4a261;
+}
+
+.test {
+  background-color: red;
+}
