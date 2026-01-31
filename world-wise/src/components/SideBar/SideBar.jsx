@@ -1,7 +1,7 @@
 import styles from './Sidebar.module.css'
-import Footer from '../components/Footer'
-import Logo from '../components/Logo'
-import AppNav from '../components/AppNav.jsx'
+import Footer from '../Footer/Footer.jsx'
+import Logo from '../Logo/Logo'
+import AppNav from '../AppNav/AppNav.jsx'
 import { Outlet } from 'react-router-dom'
 
 function SideBar() {
