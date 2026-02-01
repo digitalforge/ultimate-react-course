@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import styles from './City.module.css'
 import Spinner from '../Spinner/Spinner'
+import { useCities } from '../../context/CitiesContext'
+import ButtonBack from '../Button/ButtonBack'
 
 const BASE_URL = 'http://localhost:8000/cities'
 
@@ -14,26 +16,12 @@ const formatDate = date =>
   }).format(new Date(date))
 
 function City() {
-  const [currentCity, setCurrentCity] = useState({})
-  const [isLoading, setIsLoading] = useState(false)
   const { id } = useParams()
+  const { getCity, currentCity, isLoading } = useCities()
 
   useEffect(() => {
-    async function fetchCity() {
-      try {
-        setIsLoading(true)
-        const res = await fetch(`${BASE_URL}/${id}`)
-        const data = await res.json()
-        setCurrentCity(data)
-        setIsLoading(false)
-      } catch (err) {
-        setIsLoading(false)
-        console.log(err.message)
-      }
-    }
-
-    fetchCity()
-  }, [id, setCurrentCity, setIsLoading])
+    getCity(id)
+  }, [id])
 
   const { cityName, emoji, date, notes } = currentCity
 
@@ -67,7 +55,9 @@ function City() {
           Check out {cityName} on Wikipedia &rarr;
         </a>
       </div>
-      <div>{/* <ButtonBack /> */}</div>
+      <div>
+        <ButtonBack />
+      </div>
     </div>
   )
 }

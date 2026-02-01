@@ -1,6 +1,7 @@
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 import { useState } from 'react'
-import Button from '../../components/Button/Button'
+import ButtonBack from '../Button/ButtonBack'
+import Button from '../Button/Button'
 import styles from './Form.module.css'
 import { useNavigate } from 'react-router-dom'
 
@@ -53,15 +54,7 @@ function Form() {
         <Button onClick={handleOnClick} type='primary'>
           Add
         </Button>
-        <Button
-          onClick={e => {
-            e.preventDefault()
-            navigate(-1)
-          }}
-          type='back'
-        >
-          Back
-        </Button>
+        <ButtonBack />
       </div>
     </form>
   )
