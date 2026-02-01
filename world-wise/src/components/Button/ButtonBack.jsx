@@ -11,7 +11,7 @@ function ButtonBack() {
         navigate(-1)
       }}
     >
-      &larr;Back
+      &larr; Back
     </Button>
   )
 }
