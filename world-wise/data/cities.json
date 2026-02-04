@@ -25,16 +25,16 @@
       "id": 17806751
     },
     {
-      "cityName": "Berlin",
-      "country": "Germany",
-      "emoji": "🇩🇪",
-      "date": "2027-02-12T09:24:11.863Z",
-      "notes": "Amazing 😃",
+      "cityName": "Boston",
+      "country": "United States of America (the)",
+      "emoji": "🇺🇸",
+      "date": "2026-02-04T03:32:49.344Z",
+      "notes": "Best City in the world. Yup",
       "position": {
-        "lat": 52.53586782505711,
-        "lng": 13.376933665713324
+        "lat": "42.354484651067466",
+        "lng": "-71.07330322265626"
       },
-      "id": 98443197
+      "id": 73930387
     }
   ]
 }
