@@ -35,6 +35,18 @@
         "lng": "-71.07330322265626"
       },
       "id": 73930387
+    },
+    {
+      "cityName": "Brownville",
+      "country": "United States of America (the)",
+      "emoji": "🇺🇸",
+      "date": "2026-02-07T14:20:47.202Z",
+      "notes": "",
+      "position": {
+        "lat": "45.35021505925909",
+        "lng": "-69.05044555664064"
+      },
+      "id": 73930388
     }
   ]
 }

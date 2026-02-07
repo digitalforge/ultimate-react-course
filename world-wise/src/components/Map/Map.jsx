@@ -35,13 +35,8 @@ function Map() {
 
   useEffect(() => {
     if (!mapLat && !mapLng) return
-
-    const lat = Number(mapLat)
-    const lng = Number(mapLng)
-    const coords = [lat, lng]
-
-    setMapPosition(coords)
-  }, [mapLat, mapLng, geoZoom])
+    setMapPosition([Number(mapLat), Number(mapLng)])
+  }, [mapLat, mapLng])
 
   return (
     <div className={styles.mapContainer}>
