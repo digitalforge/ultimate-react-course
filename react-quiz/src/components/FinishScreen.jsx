@@ -1,10 +1,9 @@
-function FinishScreen({
-  points,
-  totalPoints,
-  dispatch,
-  highScore,
-  secondsRemaining,
-}) {
+import { useQuiz } from '../context/QuizContext'
+
+function FinishScreen({}) {
+  const { points, totalPoints, dispatch, highScore, secondsRemaining } =
+    useQuiz()
+
   const percentage = (points / totalPoints) * 100
 
   const minutes = Math.floor(secondsRemaining / 60)
