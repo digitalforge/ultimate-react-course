@@ -13,10 +13,13 @@ const Login = lazy(() => import('./pages/Login/Login'))
 const PageNotFound = lazy(() => import('./pages/PageNotFound/PageNotFound'))
 const AppLayout = lazy(() => import('./pages/AppLayout/AppLayout'))
 
-const CityList = lazy(() => import('./components/City/CityList'))
-const City = lazy(() => import('./components/City/City'))
-const CountryList = lazy(() => import('./components/Country/CountryList'))
-const Form = lazy(() => import('./components/Form/Form'))
+// dist/assets/index-rR3SeK17.css   31.27 kB │ gzip:   5.18 kB
+// dist/assets/index-B8tL59sm.js   580.62 kB │ gzip: 171.24 kB
+
+import CityList from './components/City/CityList'
+import City from './components/City/City'
+import CountryList from './components/Country/CountryList'
+import Form from './components/Form/Form'
 
 function App() {
   return (
