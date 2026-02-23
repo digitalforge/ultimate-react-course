@@ -19,7 +19,7 @@ export default function customerReducer(
     case 'customer/updateName':
       return {
         ...state,
-        fullName: payload.fullName,
+        fullName: payload,
       }
     default:
       return state
