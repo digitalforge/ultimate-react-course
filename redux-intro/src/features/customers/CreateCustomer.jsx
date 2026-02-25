@@ -4,13 +4,13 @@ import { createCustomer } from './customerSlice'
 
 function Customer() {
   const [fullName, setFullName] = useState('')
-  const [nationalId, setNationalId] = useState('')
+  const [nationalID, setNationalId] = useState('')
 
   const dispatch = useDispatch()
 
   function handleClick() {
-    if (!fullName || !nationalId) return
-    dispatch(createCustomer(fullName, nationalId))
+    if (!fullName || !nationalID) return
+    dispatch(createCustomer(fullName, nationalID))
   }
 
   return (
@@ -24,7 +24,7 @@ function Customer() {
         <div>
           <label>National ID</label>
           <input
-            value={nationalId}
+            value={nationalID}
             onChange={e => setNationalId(e.target.value)}
           />
         </div>

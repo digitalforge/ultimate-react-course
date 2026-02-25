@@ -1,72 +1,75 @@
-const initialStateAccount = {
+import { createSlice } from '@reduxjs/toolkit'
+
+const initialState = {
   balance: 0,
   loan: 0,
   loanPurpose: '',
   isLoading: false,
 }
 
-export default function accountReducer(
-  state = initialStateAccount,
-  { type, payload },
-) {
-  switch (type) {
-    case 'account/deposit':
-      return { ...state, balance: state.balance + payload, isLoading: false }
-    case 'account/withdraw':
-      return { ...state, balance: state.balance - payload }
-    case 'account/requestLoan':
-      if (state.loan > 0) return state
-      return {
-        ...state,
-        balance: state.balance + payload.amount,
-        loan: payload.amount,
-        loanPurpose: payload.purpose,
-      }
-    case 'account/payLoan':
-      return {
-        ...state,
-        loan: 0,
-        loanPurpose: '',
-        balance: state.balance - state.loan,
-      }
-    case 'account/convertingCurrency':
-      return { ...state, isLoading: true }
+const accountSlice = createSlice({
+  name: 'account',
+  initialState,
+  reducers: {
+    deposit(state, action) {
+      console.log(action)
+      state.balance += action.payload
+    },
+    withdraw(state, action) {
+      state.balance -= action.payload
+    },
+    requestLoan(state, action) {
+      console.log(action.payload)
+      if (state.loan > 0) return
+      state.loan += action.payload.loanAmout
+      state.loanPurpose = action.payload.loanPurpose
+      state.balance += action.payload.loanAmount
+    },
+    // THIS IS THE PREPARE WAY
+    // requestLoan: {
+    //   prepare(amount, purpose) {
+    //     return {
+    //       payload: { amount, purpose },
+    //     }
+    //   },
 
-    default:
-      return state
-  }
-}
+    //   reducer(state, action) {
+    //     if (state.loan > 0) return
+    //     state.loan = action.payload.amount
+    //     state.loanPurpose = action.payload.purpose
+    //     state.balance += action.payload.amount
+    //   },
+    // },
+    payLoan(state) {
+      state.loan = 0
+      state.loanPurpose = ''
+      state.balance -= state.loan
+    },
+    convertingCurrency(state) {
+      state.isLoading = true
+    },
+  },
+})
 
-//account actions
+console.log(accountSlice)
+
+export const { withdraw, requestLoan, payLoan } = accountSlice.actions
 
 export function deposit(amount, currency) {
   if (currency === 'USD') return { type: 'account/deposit', payload: amount }
 
-  return async function (dispatch, getState) {
+  return async function (dispatch) {
     dispatch({ type: 'account/convertingCurrency' })
-    //API CALL
+
     const res = await fetch(
-      `https://api.frankfurter.app/latest?amount=${amount}from=${currency}&to=USD`,
+      `https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=USD`,
     )
 
     const data = await res.json()
     const converted = data.rates.USD
 
-    //dispatch action
     dispatch({ type: 'account/deposit', payload: converted })
   }
 }
-export function withdraw(amount) {
-  return { type: 'account/withdraw', payload: amount }
-}
-export function requestLoan(amount, purpose) {
-  return {
-    type: 'account/requestLoan',
-    payload: { amount, purpose },
-  }
-}
-export function payLoan() {
-  return {
-    type: 'account/payLoan',
-  }
-}
+
+export default accountSlice.reducer
