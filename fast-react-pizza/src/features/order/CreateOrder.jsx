@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
-import { createOrder } from '../../services/apiRestaurant';
-import Button from '../../ui/Button';
+import { useState } from 'react'
+import { Form, redirect, useActionData, useNavigation } from 'react-router-dom'
+import { createOrder } from '../../services/apiRestaurant'
+import Button from '../../ui/Button'
+import { useSelector } from 'react-redux'
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
     str,
-  );
+  )
 
 const fakeCart = [
   {
@@ -31,16 +32,17 @@ const fakeCart = [
     unitPrice: 15,
     totalPrice: 15,
   },
-];
+]
 
 function CreateOrder() {
-  const navigation = useNavigation();
-  const isLoading = navigation.state === 'loading';
+  const username = useSelector((state) => state.user.username)
+  const navigation = useNavigation()
+  const isLoading = navigation.state === 'loading'
   // const [withPriority, setWithPriority] = useState(false)
 
-  const formErrors = useActionData();
+  const formErrors = useActionData()
 
-  const cart = fakeCart;
+  const cart = fakeCart
 
   return (
     <div className="px-4 py-6">
@@ -55,6 +57,7 @@ function CreateOrder() {
             name="customer"
             required
             className="input input-order grow"
+            defaultValue={username}
           />
         </div>
 
@@ -108,33 +111,33 @@ function CreateOrder() {
         </div>
       </Form>
     </div>
-  );
+  )
 }
 
 export async function action({ request }) {
   //the request is what the form sends when React-router intercepts it on submit
 
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
+  const formData = await request.formData()
+  const data = Object.fromEntries(formData)
 
-  console.log(data);
+  console.log(data)
 
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
     priority: data.priority === 'on',
-  };
+  }
 
-  const errors = {};
+  const errors = {}
   if (!isValidPhone(order.phone))
     errors.phone =
-      'Please give us your correct phone number. We might need it to contact you.';
+      'Please give us your correct phone number. We might need it to contact you.'
 
-  if (Object.keys(errors).length > 0) return errors;
+  if (Object.keys(errors).length > 0) return errors
 
-  const newOrder = await createOrder(order);
+  const newOrder = await createOrder(order)
 
-  return redirect(`/order/${newOrder.id}`);
+  return redirect(`/order/${newOrder.id}`)
 }
 
-export default CreateOrder;
+export default CreateOrder

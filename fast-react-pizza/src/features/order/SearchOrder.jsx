@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function SearchOrder() {
-  const [query, setQuery] = useState('');
-  const navigate = useNavigate();
+  const [query, setQuery] = useState('')
+  const navigate = useNavigate()
 
   function handleSubmit(e) {
-    e.preventDefault();
-    if (!query) return;
+    e.preventDefault()
+    if (!query) return
 
-    navigate(`/order/${query}`);
+    navigate(`/order/${query}`)
   }
 
   return (
@@ -22,7 +22,7 @@ function SearchOrder() {
         className="input input-search"
       />
     </form>
-  );
+  )
 }
 
-export default SearchOrder;
+export default SearchOrder
