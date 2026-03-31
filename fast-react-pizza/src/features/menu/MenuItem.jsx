@@ -18,6 +18,7 @@ function MenuItem({ pizza }) {
       name,
       quantity: 1,
       unitPrice,
+      ingredients,
       totalPrice: unitPrice * 1,
     }
 
